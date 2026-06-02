@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 
 //Local modules
-
+const authRouter = require("./Routes/authRoute");
 const errorHandler = require("./middleware/errorHandler");
 
 dotenv.config();
@@ -23,6 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 // 5. Routes (placeholder for now)
 app.get("/api/v1/health", (req, res) => res.json({ status: "ok" }));
+
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/auth/", authRouter);
 
 app.use(errorHandler);
 

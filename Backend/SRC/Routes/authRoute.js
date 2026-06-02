@@ -1,3 +1,8 @@
-const bcrypt = require("bcryptjs");
+const router = require("express").Router();
+const authController = require("../controllers/authController");
 
-const User = require("../Models/user");
+router.post("/register", authController.register);
+
+router.post("/login", authController.loginController);
+
+module.exports = router;

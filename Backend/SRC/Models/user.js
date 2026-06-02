@@ -28,7 +28,15 @@ const user = new mongoose.Schema(
       default: "customer",
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.password;
+        return ret;
+      },
+    },
+  },
 );
 
 user.pre("save", async function (next) {
