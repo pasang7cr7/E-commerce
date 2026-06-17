@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cart = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: user,
+    ref: "user",
     required: true,
     unique: true,
   },
@@ -12,7 +12,7 @@ const cart = new mongoose.Schema({
     {
       product: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: products,
+        ref: "products",
       },
       variantSku: {
         type: String,
