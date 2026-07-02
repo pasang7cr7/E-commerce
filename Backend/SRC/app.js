@@ -9,6 +9,7 @@ const authRouter = require("./Routes/authRoute");
 const productRouter = require("./Routes/productRoute");
 const errorHandler = require("./middleware/errorHandler");
 const cartRouter = require("./Routes/cartRoute");
+const checkoutRouter = require("./Routes/checkoutRoute");
 
 dotenv.config();
 const app = express();
@@ -29,6 +30,7 @@ app.get("/api/v1/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/cart/", cartRouter);
+app.use("/api/v1/checkout", checkoutRouter);
 
 app.use(errorHandler);
 

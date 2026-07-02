@@ -1,6 +1,7 @@
 const AppError = require("../utils/AppError");
 const Cart = require("../Models/cart");
 const Product = require("../Models/products");
+const { findOne } = require("../Models/user");
 
 exports.addToCart = async (userId, productId, variantSku, quantity) => {
   const product = await Product.findById(productId);
@@ -46,4 +47,40 @@ exports.getCart = async (userId) => {
     items: cart.items,
     totalItems: cart.items.reduce((sum, item) => sum + item.quantity, 0),
   };
+};
+
+exports.deleteCart = async (userId, itemId) => {
+  const cart = await Cart.findOneAndUpdate(
+    { user: userId },
+    { $pull: { items: { _id: itemId } } },
+    { new: true },
+  );
+  if (!cart) throw new AppError("Cart is empty", 404);
+  return {
+    items: cart.items,
+    totalItems: cart.items.reduce((sum, item) => sum + item.quantity, 0),
+  };
+};
+
+exports.patchService = async (userId, itemId, quantity) => {
+  const cart = await Cart.findOne({ user: userId });
+  if (!cart) throw new AppError("Cart not found", 404);
+  let item = cart.items.find((i) => i._id.toString() === itemId);
+  if (!item) throw new AppError("Item not found in cart ", 404);
+  item.quantity = quantity;
+  await cart.save();
+  return {
+    items: cart.items,
+    totalItems: cart.items.reduce((sum, item) => sum + item.quantity, 0),
+  };
+};
+
+exports.entireDelete = async (userId) => {
+  const cart = await Cart.findOneAndDelete(
+    { user: userId },
+
+    { new: true },
+  );
+  if (!cart) throw new AppError("No cart", 404);
+  return { message: "Cart Cleared" };
 };
